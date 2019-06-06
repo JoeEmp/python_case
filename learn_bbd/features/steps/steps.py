@@ -5,6 +5,7 @@ from features.config import *
 from selenium import webdriver
 import features.config
 from time import sleep
+from selenium.webdriver.common.action_chains import ActionChains
 
 
 @When('打开{browser}浏览器')
@@ -76,3 +77,24 @@ def step_impl6():
 def step_impl7(context, n):
     ele = page_ele_dict['翻页按钮'].replace('[n]', '[%d]' % n)
     context.browser.find_element_by_xpath(ele).click()
+
+
+@When('悬停在{ele}')
+def step_impl8(context, ele):
+    ele = context.browser.find_element_by_xpath(page_ele_dict[ele])
+    ActionChains(context.browser).click_and_hold(ele).perform()
+
+
+@When('确定(浏览器警告框)')
+def step_impl9(context):
+    context.browser.switch_to.alert.accept()
+
+
+@When('取消(浏览器警告框)')
+def step_impl9(context):
+    context.browser.switch_to.alert.dismiss()
+
+
+@When('输入内容{text}(浏览器警告框)')
+def step_impl9(context, text):
+    context.browser.switch_to.alert.send_keys(text)
