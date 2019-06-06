@@ -1,6 +1,7 @@
 # Created by iyourcar at 2019-06-06
 Feature: learn bbd
-  学习bbd，提供了一些操作元素的例子
+  实现了一些web上一些操作元素的例子
+  上网搜索 bbd 或者 behave 获得更多资料
 
   Scenario: 搜素github
     When 打开谷歌浏览器
