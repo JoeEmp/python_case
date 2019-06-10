@@ -23,7 +23,7 @@ def step_impl0(context, browser):
         context.browser = webdriver.Chrome()
     else:
         pass
-    context.browser.implicitly_wait(100)
+    context.browser.implicitly_wait(implicitly_wait_sec)
     context.browser.maximize_window()
     return True
 
@@ -98,3 +98,9 @@ def step_impl9(context):
 @When('输入内容{text}(浏览器警告框)')
 def step_impl9(context, text):
     context.browser.switch_to.alert.send_keys(text)
+
+
+@When('选择第{n:d}个推荐项')
+def step_impl9(context, n):
+    ele = page_ele_dict['推荐项'].replace('[n]', '[%d]' % n)
+    context.browser.find_element_by_xpath(ele).click()
