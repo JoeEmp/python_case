@@ -49,7 +49,8 @@ def step_impl3(context, ele, text):
     try:
         # context.browser.find_element_by_xpath(page_ele_dict[ele]).click()
         context.browser.find_element_by_xpath(page_ele_dict[ele]).clear()
-        context.browser.find_element_by_xpath(page_ele_dict[ele]).send_keys(text)
+        context.browser.find_element_by_xpath(
+            page_ele_dict[ele]).send_keys(text)
     except Exception as e:
         logging.warning(e)
 
@@ -104,3 +105,8 @@ def step_impl9(context, text):
 def step_impl9(context, n):
     ele = page_ele_dict['推荐项'].replace('[n]', '[%d]' % n)
     context.browser.find_element_by_xpath(ele).click()
+
+
+@Then('截图{file_name}')
+def step_impl10(context, file_name):
+    context.browser.save_screenshot('./%s' % file_name)

@@ -52,8 +52,9 @@ Feature: learn bbd
   Scenario Outline: 访问不同的网站
     When 访问<site>
     When sleep 2s
+    Then 截图<file_name>
 
-    Examples: 网站
-      | site |
-      | 百度   |
-      | 大众点评 |
+    Examples: 网站,截图
+      | site | file_name           |
+      | 百度   | baidu.png           |
+      | 大众点评 | dazhongdianping.png |
