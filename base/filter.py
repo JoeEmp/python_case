@@ -54,8 +54,8 @@ def filter_2(num):
 # @get_run_time
 def filter_3(num):
     '''
-    仿c的一种写法。在c中for的处理机制不同我会在完成某些操作然后变更索引。
-    python中，每次for都会重新复制i，同时for的可迭代对象不可短长度。
+    仿c的一种写法。在c中for的处理机制不同我会在完成某些操作然后变更i。
+    python中，每次for都会重新赋值i，同时for的可迭代对象不可短长度。
     故此加入了偏置，同时迭代len(object)
     :param num:
     :return:
