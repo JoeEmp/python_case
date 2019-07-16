@@ -9,7 +9,7 @@ config_data = {
     # 提测时间
     "test_dealine": "2019-07-12 13:30:00",
     # 机器人的key
-    "test_key": 'f6447e4d-6101-4e7b-a971-2560c42aeb53'
+    "test_key": ''
 }
 
 
@@ -43,10 +43,7 @@ def job():
     days = (now-test_dealine).days
     # 项目组人员的电话号码
     phone_list = [
-        '15521245028',  #兆聪
-        '17777826220',  #光明
-        '13922455242',  #晓令
-        '15692003859'   #俊成
+        "@all"
     ]
     content = 'init'
     # 提醒规则请自定义
