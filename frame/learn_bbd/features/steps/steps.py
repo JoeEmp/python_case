@@ -1,11 +1,10 @@
-import logging
 from behave import When, Given, Then
 # from pymouse.mac import PyMouse
-from features.config import *
+from frame.learn_bbd.features.config import *
 from selenium import webdriver
-import features.config
 from time import sleep
 from selenium.webdriver.common.action_chains import ActionChains
+
 
 
 @When('打开{browser}浏览器')
@@ -109,4 +108,4 @@ def step_impl9(context, n):
 
 @Then('截图{file_name}')
 def step_impl10(context, file_name):
-    context.browser.save_screenshot('./%s' % file_name)
+    context.browser.save_screenshot('../%s' % file_name)

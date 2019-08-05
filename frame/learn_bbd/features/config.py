@@ -1,4 +1,5 @@
 import logging
+from os import chdir
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(filename)s %(funcName)s %(message)s')
 
@@ -14,8 +15,9 @@ page_ele_dict = {
     '翻页按钮': '//*[@id="page"]/a[3]/span[n]',
     '设置': '//*[@id="u"]/a[2]',
     '搜索设置': '//*[@class="setpref"]',
-    '设置保存': '//*[@id="gxszButton"]/a[1]',
-    '推荐项': '//*[@id="form"]/div/ul/li[n]'
+    '保存设置': '//*[@id="gxszButton"]/a[1]',
+    '推荐项': '//*[@id="form"]/div/ul/li[n]',
+    '学术': '//*[@id="u1"]/a[6]'
 }
 
 # 环境支持可自动化的浏览器
@@ -24,3 +26,6 @@ browser_list = [
 ]
 
 implicitly_wait_sec = 100
+
+dir = __file__[:-len(__file__.split('/')[-1])]
+chdir(dir)

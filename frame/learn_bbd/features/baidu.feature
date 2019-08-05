@@ -37,7 +37,7 @@ Feature: learn bbd
     When 点击搜索按钮
     When 悬停在设置
     When 点击搜索设置
-    When 点击设置保存
+    When 点击保存设置
     When sleep 2s
     When 确定(浏览器警告框)
     When sleep 2s

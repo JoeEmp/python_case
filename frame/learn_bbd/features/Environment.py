@@ -1,7 +1,7 @@
 # coding:utf-8
 from behave import *
 from selenium import webdriver
-from features.config import *
+from frame.learn_bbd.features.config import *
 
 __author__ = 'joe'
 
