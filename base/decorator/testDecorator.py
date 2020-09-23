@@ -13,26 +13,25 @@ class ENV(Enum):
     debug = 'http://127.0.0.1:5000'
     pro = 'https://todo.winn.online'
 
-def url(url, env='debug'):
+def url(url, env='test'):
     def decorator(func):
         def wrapper(*args, **kwargs):
             try:
-                prefix = ENV[env].value
+                prefix = ENV[env].value+'/'
             except:
-                prefix = ENV['debug'].value
-            func(prefix+url, args, kwargs)
+                prefix = ENV['debug'].value+'/'
+            return func(prefix+url, *args, **kwargs)
         return wrapper
     return decorator
 
 
 @url('/', env='test')
-def get_hello(url,*args):
+def get_hello(url,*args,*kwargs):
     r = requests.get(url)
     print(r.text)
 
 @url('/ContributorList')
-def get_ContributorList(url, *args):
-    args, kwargs = args[0], args[1]
+def get_ContributorList(url, *args,**kwargs):
     r = requests.get(url, data=kwargs)
     print(r.text)
 
