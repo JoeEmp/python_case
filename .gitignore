@@ -6,3 +6,4 @@ pri/
 __pycache__
 *.rb
 .pytest_cache
+.DS_Store
