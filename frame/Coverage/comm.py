@@ -1,7 +1,13 @@
 def deal_case(cases):
     new_cases = []
     for case in cases:
-        case = case.replace('\n', '')
+        case = case.rstrip('\n')
         new_cases.append(case.split(','))
-    # print(new_cases)
     return new_cases
+
+def read_file(filename, is_line=False, *args, **kwargs):
+    with open(filename) as f:
+        if is_line:
+            return f.readlines()
+        else:
+            return f.read()

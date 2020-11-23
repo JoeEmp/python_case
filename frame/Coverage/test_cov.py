@@ -1,26 +1,25 @@
 import os
 import unittest
 from coverage import Coverage
-from frame.Coverage.add import add
-from frame.Coverage.comm import *
+from add import add
+from comm import deal_case, read_file
 
 
 class my_test(unittest.TestCase):
 
     def setUp(self):
-        try:
+        if not os.path.exists(self._testMethodName):
             os.system('mkdir %s' % self._testMethodName)
-        except Exception as e:
-            print(e)
         # 这里依赖于命名规范，include指定要测试的文件
-        self.cov = Coverage(include=['comm.py', '%s.py' % self._testMethodName[5:]])
+        if self._testMethodName.startswith("test_"):
+            include_name = self._testMethodName[5:]
+        self.cov = Coverage(
+            include=['comm.py', '%s.py' % include_name])
         self.cov.start()
         return super().setUp()
 
     def test_add(self):
-        with open('./add_test.txt', 'r') as f:
-            cases = f.readlines()
-        cases = deal_case(cases)
+        cases = deal_case(read_file("add_test.txt", is_line=True))
         for case in cases:
             result = add(case[0], case[1])
             if 0 == result['code']:
@@ -39,5 +38,5 @@ class my_test(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    os.chdir(__file__[:-len(__file__.split('/')[-1])])
+    os.chdir(os.path.abspath(os.path.dirname(__file__)))
     unittest.main()
