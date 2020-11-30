@@ -11,7 +11,8 @@ nt = datetime.now()
 class logRecord:
     def __init__(self):
         self.ts = nt.strftime("%Y%m%d%H%M%S")
-        self.target_hosts = ['api.s.suv666.com']
+        # 需要录制的主机
+        self.target_hosts = []
         self.logs = []
         self.log_name = "mitmproxy_requests_%s" % self.ts
         self.request_log = {}
