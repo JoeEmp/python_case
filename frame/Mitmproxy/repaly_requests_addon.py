@@ -4,6 +4,7 @@ from datetime import datetime
 import logging
 import json
 import copy
+import os
 
 nt = datetime.now()
 
@@ -12,8 +13,7 @@ class logRecord:
     def __init__(self):
         self.ts = nt.strftime("%Y%m%d%H%M%S")
         # 需要录制的主机
-        self.target_hosts = []
-        self.logs = []
+        self.target_hosts = ['api.s.suv666.com']
         self.log_name = "mitmproxy_requests_%s" % self.ts
         self.request_log = {}
         # debug
@@ -28,7 +28,9 @@ class logRecord:
             for key, value in headers.items():
                 self.request_log['headers'][key] = value
             self.request_log['text'] = flow.request.text
-            print(self.request_log)
+            with open('record_%s.log' % self.ts, 'a+') as f:
+                f.writelines(json.dumps(self.request_log)+os.linesep)
+                f.close()
 
 
 addons = [

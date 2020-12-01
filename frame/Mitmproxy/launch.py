@@ -3,6 +3,7 @@ from platform import system
 from socket import socket as sock
 import socket
 from time import sleep
+dirpath = os.path.abspath(os.path.dirname(__file__))+os.sep
 
 MITM_PORT = 8888
 
@@ -48,10 +49,10 @@ def get_addon_py(want: str):
     try:
         addon_py = want.split(' ')[1] or "repaly_requests_addon.py"
     except IndexError as e:
-        addon_py = "repaly_requests_addon.py"
+        addon_py = dirpath + "repaly_requests_addon.py"
     except Exception as e:
         print(type(e), e)
-        addon_py = "repaly_requests_addon.py"
+        addon_py = dirpath + "repaly_requests_addon.py"
     if not os.path.exists(addon_py):
         print('addon file %s not found' % addon_py)
         return ''
@@ -69,7 +70,10 @@ def launch(want: str):
     addon['port'] = 8888
     s = sock(socket.AF_INET, socket.SOCK_STREAM)
     if 0 == s.connect_ex(('127.0.0.1', MITM_PORT)):
-        quit()
+        s.close()
+        print('%s have process run,you can use shutdown to free the port' %
+              addon['port'])
+        return
     cmd = 'nohup mitmweb -p {port} {addon} &'.format_map(addon)
     # print(cmd)
     os.system(cmd)

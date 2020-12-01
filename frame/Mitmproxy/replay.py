@@ -6,16 +6,13 @@ import requests
 dirpath = os.path.abspath(os.path.dirname(__file__))
 
 
-def get_records(filename='nohup.out'):
+def get_records(filename):
     records = []
     filename = dirpath+'/'+filename
     with open(filename, 'r') as f:
         records = [eval(line.strip(os.linesep))
                    for line in f if not line.startswith(os.linesep)]
     for record in records:
-        # 处理运行报错.
-        if isinstance(record, str):
-            continue
         # 默认为http,有证书可以注释该处理
         record['url'] = record['url'].replace('https', 'http')
         new_headers = {}
@@ -33,7 +30,8 @@ if __name__ == "__main__":
     sys.path.append(last_dirpath)
     from base_api import base_api, api_proxies
     api = base_api()
-    for record in get_records():
+    log_name = 'record_xxxx.log'
+    for record in get_records(log_name):
         url, headers, data = record['url'], record['headers'], record['text']
         ret = requests.post(url, headers=headers, data=data)
         print(ret)
