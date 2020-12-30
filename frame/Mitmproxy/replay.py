@@ -13,12 +13,10 @@ def get_records(filename):
         records = [eval(line.strip(os.linesep))
                    for line in f if not line.startswith(os.linesep)]
     for record in records:
-        # 默认为http,有证书可以注释该处理
-        record['url'] = record['url'].replace('https', 'http')
         new_headers = {}
         for key, value in record['headers'].items():
             # requests 不支持2.0请求头,过滤请求头
-            if ":" == value[0]:
+            if ":" == key[0]:
                 continue
             new_headers[str(key)] = str(value)
         record['headers'] = new_headers
@@ -30,9 +28,7 @@ if __name__ == "__main__":
     sys.path.append(last_dirpath)
     from base_api import base_api, api_proxies
     api = base_api()
-    log_name = 'record_xxxx.log'
+    log_name = 'record_20201210151458.log'
     for record in get_records(log_name):
         url, headers, data = record['url'], record['headers'], record['text']
-        ret = requests.post(url, headers=headers, data=data)
-        print(ret)
-        break
+        ret = api.post(url, headers=headers, data=data, proxies=api_proxies,verify=False)

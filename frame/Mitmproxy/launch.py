@@ -21,7 +21,7 @@ def get_pid_by_port(port):
         return []
     lines = [_ for _ in result.split(os.linesep) if _]
     title = lines.pop(0)
-    pids = [int(line.split(' ')[2]) for line in lines]
+    pids = [int(line.split()[1]) for line in lines if line]
     return pids
 
 
