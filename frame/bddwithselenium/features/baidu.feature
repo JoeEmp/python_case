@@ -14,7 +14,7 @@ Feature: learn bbd
     When 在搜索框输入github
     When 点击搜索按钮
     When sleep 2s
-#    When 滚动屏幕到底部
+    #    When 滚动屏幕到底部
     When 翻到第2页
     When sleep 2s
 
@@ -51,6 +51,6 @@ Feature: learn bbd
     Then 截图<file_name>
 
     Examples: 网站,截图
-      | site | file_name           |
-      | 百度   | baidu.png           |
+      | site     | file_name           |
+      | 百度     | baidu.png           |
       | 大众点评 | dazhongdianping.png |

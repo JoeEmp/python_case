@@ -63,8 +63,8 @@ class testFaker(unittest.TestCase):
 
 def init_suite():
     suite = unittest.TestSuite()
-    suite.addTest(testFaker('test_generatorUrlParameter'))
-    suite.addTest(testFaker('test_generatorBodyParameter'))
+    # suite.addTest(testFaker('test_generatorUrlParameter'))
+    # suite.addTest(testFaker('test_generatorBodyParameter'))
     return suite
 
 

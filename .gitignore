@@ -7,3 +7,7 @@ __pycache__
 *.rb
 .pytest_cache
 .DS_Store
+nohup.out
+*.png
+*.apk
+*.ipa
