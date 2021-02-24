@@ -17,6 +17,19 @@ import unittest
 import logging
 import time
 
+# 题解
+"""
+假设有数组 a,b,c,d....
+sum,max = 0,0
+if a+b>a:
+    b > 0
+else:
+    b <= 0
+if b = 0:
+    a+b+c > a+b 类推
+else:
+    b + c > b
+"""
 
 class Solution():
     @staticmethod
@@ -46,13 +59,15 @@ class Solution():
 class MyTest(unittest.TestCase):
     def test_maxSubArray(self):
         cases = [
-            {"list": [-2, 1, -3, 4, -1, 2, 1, -5, 4], 'result':6}
+            {"list": [-2, 1, -3, 4, -1, 2, 1, -5, 4], 'result':6},
+            {"list": [-2, -5, -4, -3, -1], 'result':-1},
+            {"list": [0,0,0], 'result':0}
         ]
         for case in cases:
             start_time = time.time()
             try:
-                self.assertEqual(Solution.maxSubArray(
-                    case['list'])[0], case['result'])
+                self.assertEqual(Solution.maxSubArray2(
+                    case['list'])[0], case['result'])       
             except AssertionError:
                 logging.error(' {} != {} case fail {}'.format(
                     Solution.maxSubArray(case['list'])[0], case['result'], case))
