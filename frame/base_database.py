@@ -7,6 +7,16 @@ MYSQL_PASSWORD = '123456'
 DEF_MYSQL_PORT = 3306
 ENV = 'test'
 
+# docker run 
+# docker run --name case_PG -e POSTGRES_PASSWORD=123456 -p 54322:5432 -d  postgres
+POSTGRES_USER = 'postgres'
+POSTGRES_PASSWORD = '123456'
+DEF_POSTGRES_PORT = 54322
+
+@unique
+class Postgre_SERVER(Enum):
+    test = '127.0.0.1'
+    pro = ''
 
 @unique
 class MYSQL_SERVER(Enum):
@@ -91,6 +101,20 @@ class mySqlDataBase(BaseDataBase):
         else:
             self.db = records.Database(
                 'mysql+pymysql://{}:{}@{}:{}'.format(username, pwd, server, port))
+
+class PostgreSQLDataBase(BaseDataBase):
+    def __init__(self, dbname=None, server=None, username=None, pwd=None, port=None):
+        server = server or MYSQL_SERVER[ENV].value
+        username = username or MYSQL_USER
+        pwd = pwd or MYSQL_PASSWORD
+        port = port or DEF_MYSQL_PORT
+        if dbname:
+            self.db = records.Database(
+                'postgresql+psycopg2://{}:{}@{}:{}'.format(username, pwd, server, port, dbname))
+        else:
+            self.db = records.Database(
+                'postgresql+psycopg2://{}:{}@{}:{}'.format(username, pwd, server, port))
+        print('link sucess {}'.format(self.db))
 
 
 if __name__ == "__main__":
