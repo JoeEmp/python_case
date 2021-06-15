@@ -5,7 +5,7 @@ nohup安装 `brew instll nohup`
 
 插件开发所需 `pip3 install mitmproxy`
 
-常用请求库 `pip install mitmproxy`
+常用请求库 `pip install requests`
 
 
 [mitmproxy官网](https://mitmproxy.org/)
