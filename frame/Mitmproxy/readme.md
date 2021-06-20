@@ -1,6 +1,4 @@
 ### 准备
-mitmproxy安装 `brew install mitmproxy`
-
 nohup安装 `brew instll nohup`
 
 插件开发所需 `pip3 install mitmproxy`

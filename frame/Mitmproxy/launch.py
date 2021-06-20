@@ -63,9 +63,9 @@ def launch(want: str):
     addon_py = get_addon_py(want)
     addon = {}
     if addon_py:
-        addon = {"addon": ' -s %s ' % addon_py}
+        addon = {"addon": '-s %s ' % addon_py}
     else:
-        print('without add launch mitmweb')
+        print('without addon launch mitmweb')
         addon = {"addon": ''}
     addon['port'] = 8888
     s = sock(socket.AF_INET, socket.SOCK_STREAM)

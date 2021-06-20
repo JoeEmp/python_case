@@ -24,13 +24,12 @@ class base_api(object):
             return True
         return False
 
-    def get_api(self, url: str, method='post', *args, **kwargs) -> dict:
+    def get_api(self, url: str, method='post',version='1.0',withlog=False, *args, **kwargs) -> dict:
         """version param is support http2.0 request."""
         ret = dict(status=True)
         try:
             s = session()
-            version = kwargs.pop('version',None)
-            if version and '2.0' == version:
+            if '2.0' in version:
                 search = r'https://.+?/' if url.startswith(
                     'https') else r'http://.+?/'
                 start, end = re.search(search, url).span()
@@ -49,7 +48,7 @@ class base_api(object):
             for key in ['data', 'json', 'params']:
                 if key in kwargs.keys():
                     body = kwargs[key]
-            if kwargs.get('withlog', None):
+            if withlog:
                 logging.info(self.log_str.format_map(
                     dict(url=url, body=body, response=ret['response'])))
         except Exception as e:
