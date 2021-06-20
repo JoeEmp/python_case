@@ -13,7 +13,7 @@ class logRecord:
     def __init__(self):
         self.ts = nt.strftime("%Y%m%d%H%M%S")
         # 需要录制的主机
-        self.target_hosts = ['api.s.suv666.com']
+        self.target_hosts = []
         self.log_name = "mitmproxy_requests_%s" % self.ts
         self.request_log = {}
         self.response_log = {}
@@ -24,6 +24,7 @@ class logRecord:
         if not self.target_hosts or flow.request.host in self.target_hosts:
             self.request_log['url'] = flow.request.url
             self.request_log['version'] = flow.request.http_version
+            self.request_log['method'] = flow.request.method
             self.request_log['headers'] = dict()
             headers = copy.deepcopy(flow.request.headers)
             for key, value in headers.items():
