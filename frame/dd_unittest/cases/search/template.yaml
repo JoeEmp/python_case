@@ -1,0 +1,14 @@
+- Driver:
+        get: "{url}"
+- Driver:
+        maximize_window:
+- BaiduIndexPage:
+        search_input:
+              send_keys: "{key}"
+- BaiduIndexPage:
+        search_button:
+              click:
+- Assert:
+        - in
+        - "{key}"
+        - $driver.title
