@@ -5,7 +5,6 @@ import unittest
 from time import sleep
 from selenium.webdriver.support.events import EventFiringWebDriver, AbstractEventListener
 from copy import deepcopy
-# from queue import Queue
 from collections import deque
 
 

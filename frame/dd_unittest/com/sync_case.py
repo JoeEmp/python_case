@@ -89,38 +89,24 @@ class YamlTemplateCases():
         # {'Assert': ['in', 'github JoeEmp', '$driver.title']}
         temp = deepcopy(template)
         for step in temp:
-            for step_dict, params in step.items():
-                case.append(self.gen_step(step_dict, params, data))
+            case.append(self.gen_step(step, data))
         return case
 
-    def gen_step(self, step, params, data: dict):
-        """结构化每个步骤."""
+    def gen_step(self, step, data):
         if not data:
-            return {step: params}
-        # 断言、driver步骤
-        if 'assert' == step.lower():
-            for i in range(len(params)):
-                params[i] = params[i].format(**data)
-        elif 'driver' == step.lower():
-            for k in params.keys():
-                if not params[k]:
-                    continue
-                if isinstance(params[k], str):
-                    params[k] = [params[k], ]
-                for i in range(len(params[k])):
-                    params[k][i] = params[k][i].format(**data)
-        # po步骤
+            return step
+        if isinstance(step, dict):
+            for k in step.keys():
+                step[k] = self.gen_step(step[k], data)
+            return step
+        elif isinstance(step, list) or isinstance(step, str):
+            if isinstance(step, str):
+                step = [step]
+            for i in range(len(step)):
+                step[i] = step[i].format(**data)
+            return step
         else:
-            for k in params.keys():
-                for action in params[k].keys():
-                    if not params[k][action]:
-                        continue
-                    if isinstance(params[k][action], str):
-                        params[k][action] = [params[k][action], ]
-                    for i in range(len(params[k][action])):
-                        params[k][action][i] = params[k][action][i].format(
-                            **data)
-        return {step: params}
+            return step
 
 
 class YamlCaseRunner():
@@ -141,7 +127,6 @@ class YamlCaseRunner():
         result = None
         imp_module = importlib.import_module('page')
         for step in self.case:
-            # print(step)
             result_tuple = self.exec_step(
                 step=step, result=result, imp_module=imp_module)
             if 'page' == result_tuple[0]:
@@ -164,19 +149,26 @@ class YamlCaseRunner():
                 return ('assert',
                         self.exec_assert_step(
                             self.test_case_obj,
-                            func_args=args, driver=self.driver, result=result))
+                            func_args=args, 
+                            driver=self.driver, 
+                            result=result))
             # driver步骤
             elif 'driver' == func.lower():
-                page = func
                 return ('driver',
-                        self.exec_driver_step(func_dict=args,
-                                              driver=self.driver, cap=self.cap))
+                        self.exec_driver_step(
+                            func_dict=args,
+                            driver=self.driver, 
+                            cap=self.cap))
             # 普通步骤
             else:
                 page = func
                 return ('page',
-                        self.exec_po_step(page=page, ele_dict=args,
-                                          imp_module=imp_module, driver=self.driver, cap=self.cap))
+                        self.exec_po_step(
+                            page=page, 
+                            ele_dict=args,
+                            imp_module=imp_module, 
+                            driver=self.driver, 
+                            cap=self.cap))
 
     def exec_assert_step(self, test_case_obj: TestCase, func_args, driver=None, result=None):
         assert_type, func_args = func_args[0], func_args[1:]
