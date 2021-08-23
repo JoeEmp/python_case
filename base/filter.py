@@ -56,7 +56,7 @@ def filter_3(num):
     '''
     仿c的一种写法。在c中for的处理机制不同我会在完成某些操作然后变更i。
     python中，每次for都会重新赋值i，同时for的可迭代对象不可短长度。
-    故此加入了偏置，同时迭代len(object)
+    故此加入了偏置，防止越界
     :param num:
     :return:
     '''
@@ -77,7 +77,7 @@ def filter_4(num):
     :return:
     '''
     o_list = [i for i in range(num)]
-    filter(filter_list, o_list)
+    return filter(filter_list, o_list)
 
 
 def filter_list(num):
@@ -89,18 +89,19 @@ def filter_list(num):
 
 if __name__ == "__main__":
     for i in range(3):
-        start = time.time()
-        filter_1(100000)
-        print(time.time() - start)
-        start = time.time()
-        filter_2(100000)
-        print(time.time() - start)
-        start = time.time()
         # start = time.time()
-        filter_3(100000)
-        print(time.time() - start)
+        # filter_1(100000)
+        # print(time.time() - start)
+        # start = time.time()
+        # filter_2(100000)
+        # print(time.time() - start)
+        # start = time.time()
+        # # start = time.time()
+        # filter_3(100000)
+        # print(time.time() - start)
         start = time.time()
-        filter_4(100000)
+        l = list(filter_4(100000))
+        print(l[0:5])
         print(time.time() - start)
         print('-' * 20)
 

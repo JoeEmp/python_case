@@ -1,7 +1,8 @@
 # 不做研究只做应用，用到哪写到哪
 
-import xlrd
+# import xlrd
 from datetime import datetime
+from openpyxl import load_workbook
 
 datetime_fmt = '%H:%M:%S'
 
@@ -19,12 +20,12 @@ class my_excel():
         """
         xls = xls or self.xls
         sheet_name = sheet_name or self.sheet_name
-        self.workbook = xlrd.open_workbook(xls)
-        self.sheet = self.workbook.sheet_by_name(sheet_name)
+        self.workbook = load_workbook(xls)
+        self.sheet = self.workbook.get_sheet_by_name(sheet_name)
         rows = []
-        for row in range(self.sheet.nrows):
+        for row in range(1, self.sheet.max_row+1):
             line = []
-            for col in range(self.sheet.ncols):
+            for col in range(1, self.sheet.max_column+1):
                 line.append(self.dispaly_value(row, col))
             rows.append(line)
         header = rows.pop(0)
@@ -33,12 +34,7 @@ class my_excel():
     def dispaly_value(self, row, col):
         """return dispaly value which your edit"""
         # 兼容日期value为浮点数的情况
-        value = self.sheet.cell(row, col)
-        if 3 == value.ctype:
-            date_tuple = xlrd.xldate_as_tuple(
-                self.sheet.cell_value(row, col), self.workbook.datemode)
-            return datetime(*date_tuple).strftime(datetime_fmt)
-        return value
+        return self.sheet.cell(row=row, column=col).value
 
     def to_dict(self, header=None, rows=None):
         """行数据转json格式
@@ -46,10 +42,42 @@ class my_excel():
         """
         self.dict_table = []
         rows = rows or self.rows
-        headder = header or self.header
+        header = header or self.header
         for row in rows:
             d = {}
             for i in range(len(row)):
-                key, value = header[i].split('/')[-1], row[i]
+                key, value = header[i], row[i]
                 d[key] = value
             self.dict_table.append(d)
+
+    def write_cell(self, value, row, col):
+        self.sheet.cell(row=row, column=col, value=value)
+
+    def save(self):
+        self.workbook.save(self.xls)
+
+
+def main():
+    excel = my_excel('/Users/joe/Documents/eos埋点.xlsx', 'point')
+    lines = excel.dict_table
+    for i in range(len(lines)):
+        if not lines[i]['备注(extra_field)']:
+            lines[i]['query'] = '"{}" and "{}" and "{}"'.format(
+                lines[i]['页面（page）'],
+                lines[i]['事件类型（event_code）'],
+                lines[i]['事件名称（specific_event_key）']
+            )
+        else:
+            lines[i]['query'] = ''
+            for param in lines[i]['备注(extra_field)'].split('\n'):
+                lines[i]['query'] += '"{}" and "{}" and "{}" and "{}"'.format(
+                    lines[i]['页面（page）'],
+                    lines[i]['事件类型（event_code）'],
+                    lines[i]['事件名称（specific_event_key）'],
+                    param
+                ) + '\n'
+        excel.write_cell(lines[i]['query'], i+2, 1)
+    excel.save()
+
+
+main()

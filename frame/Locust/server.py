@@ -1,13 +1,17 @@
 from flask import Flask, request, jsonify
 import logging
 import os
-from utils import generate_index,generate_account,load_csv
+from utils import generate_index, generate_account, load_csv
 
 app = Flask(__name__)
 USER_TABLE = []
 USER_INDEX = []
 
 file_dir = os.path.abspath(os.path.dirname(__file__))+os.sep
+logging.basicConfig(
+    format='%(asctime)s %(message)s'
+)
+
 
 def generate_account(num, filename=''):
     import os
@@ -27,6 +31,7 @@ def generate_account(num, filename=''):
             f.writelines(lines)
         return filename
 
+
 def get_user(username):
     global USER_TABLE
     global USER_INDEX
@@ -39,12 +44,14 @@ def get_user(username):
         logging.error('Data asymmetry {}'.format(e))
         return {}
 
+
 def init_data():
     global USER_TABLE
     global USER_INDEX
-    filename = generate_account(100)
+    filename = generate_account(1000)
     USER_TABLE = load_csv(filename)
-    USER_INDEX = generate_index(USER_TABLE,'username')
+    USER_INDEX = generate_index(USER_TABLE, 'username')
+
 
 def request_parse(req_data):
     '''解析请求数据并以json形式返回'''
@@ -54,8 +61,10 @@ def request_parse(req_data):
         data = req_data.args
     return data
 
+
 def is_legal_uer(username):
     return True if get_user(username) else False
+
 
 def is_right_password(username, password):
     account = get_user(username)
@@ -63,6 +72,7 @@ def is_right_password(username, password):
         return True if password == account['password'] else False
     else:
         return False
+
 
 @app.route('/')
 def index():
@@ -74,8 +84,10 @@ def login():
     data = request_parse(request)
     try:
         username, password = data.get('username'), data.get('password')
+        logging.warning('user:{},pwd:{}'.format(username, password))
     except Exception as e:
         print(e)
+        return jsonify(msg='params error')
     if is_legal_uer(username):
         if is_right_password(username, password):
             logging.info('login success')
@@ -86,10 +98,17 @@ def login():
     else:
         return jsonify(msg='user %s is not exist' % username)
 
+
 @app.route('/about', methods=['GET', 'POST'])
 def about():
     return jsonify(msg='about flask')
 
+@app.route('/jmeter/app/good/list',methods=['GET', 'POST'])
+def good_list():
+    return jsonify(
+        code=0,
+        list=['python3 base','python3 flask']
+    )
 
 if __name__ == "__main__":
     init_data()
@@ -97,7 +116,7 @@ if __name__ == "__main__":
     try:
         app.run(host='0.0.0.0',
                 port=10086,
-                debug=True,
+                debug=False,
                 threaded=True
                 )
         os.system('lsof -i:10086')

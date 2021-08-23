@@ -1,0 +1,10 @@
+{
+    "platformName": "Android",
+    "platformVersion": "10",
+    "automationName": "UIAutomator2",
+    "deviceName": "42fb7e51",
+    "noReset": true,
+    "fullReset": false,
+    "appPackage": "com.xinghuowx.wx.debug",
+    "appActivity": "com.xinghuolive.live.SplashActivity"
+}
