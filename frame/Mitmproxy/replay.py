@@ -26,7 +26,7 @@ if __name__ == "__main__":
     sys.path.append(last_dirpath)
     from base_api import base_api, api_proxies
     api = base_api()
-    log_name = 'record_20210621010243.log'
+    log_name = 'record_20210621020246.log'
     for record in get_records(log_name):
         kwargs = {
             "url": record['url'],

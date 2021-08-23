@@ -17,19 +17,19 @@ class mytest(unittest.TestCase):
     def setUp(self):
         # self.part = {"(": ")", "[": "]", "{": "}", "": ''}
         self.datas = [
-            # ['()', True],
-            # ["()[]{}", True],
-            # ["(]", False],
-            # ['([)]', False],
-            # ['{[]}', True],
-            # ['', True],
+            ['(123)', True],
+            ["()[]{}", True],
+            ["(]", False],
+            ['([)]', False],
+            ['{[]}', True],
+            ['', True],
             ['(', False],
             [']', False],
         ]
 
     def test_case(self):
         for data in self.datas:
-            self.assertEqual(myFunction(
+            self.assertEqual(isValid(
                 data[0]), data[1], "case is %r" % data[0])
 
 
@@ -44,7 +44,8 @@ def myFunction(s: str):
             begin_char_index = max([i for i in begin_char_indexs if i >= 0])
             begin_char = s[begin_char_index]
             sub_s = s[begin_char_index+1:]
-            end_char_indexs = [sub_s.find('}'), sub_s.find(')'), sub_s.find(']')]
+            end_char_indexs = [sub_s.find(
+                '}'), sub_s.find(')'), sub_s.find(']')]
             end_char_index = min([i for i in end_char_indexs if i >= 0])
             target_char_index = sub_s.find(part[begin_char])
         except Exception as e:
@@ -57,15 +58,22 @@ def myFunction(s: str):
             list_s[end_char_index+begin_char_index+1] = ''
             return myFunction(''.join(list_s))
 
-def otherFunction(s:str):
-    # wings-kbftQ3BYHH wings 2018-11-29
-    while '{}' in s or '()' in s or '[]' in s:
-        s = s.replace('{}', '')
-        s = s.replace('[]', '')
-        s = s.replace('()', '')
-    return s == ''
+
+def isValid(s: str) -> bool:
+    # jyd
+    dic = {'{': '}',  '[': ']', '(': ')', '?': '?'}
+    l = ['{','}','[',']','(',')']
+    stack = ['?']
+    for c in s:
+        if c not in l:
+            continue
+        if c in dic:
+            stack.append(c)
+        elif dic[stack.pop()] != c: 
+            return False 
+    return len(stack) == 1
 
 if __name__ == "__main__":
-    unittest.main()
+    # unittest.main()
     # print(myFunction('(233)'))
     # min([])

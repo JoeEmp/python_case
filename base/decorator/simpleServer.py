@@ -7,6 +7,7 @@
 @FilePath: /base/decorator/simpleServer.py
 '''
 from flask import Flask, request
+from flask_cors import CORS
 app = Flask(__name__)
 
 
@@ -25,4 +26,5 @@ def ContributorList():
 
 
 if __name__ == "__main__":
+    CORS(app, supports_credentials=True)
     app.run(port=5000)
