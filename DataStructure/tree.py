@@ -1,11 +1,3 @@
-'''
-@Author: your name
-@Date: 2020-03-06 15:27:35
-@LastEditTime: 2020-03-07 00:18:46
-@LastEditors: Please set LastEditors
-@Description: In User Settings Edit
-@FilePath: /learn_case/DataStructure/tree.py
-'''
 import os
 
 
