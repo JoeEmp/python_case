@@ -11,3 +11,5 @@ nohup.out
 *.png
 *.apk
 *.ipa
+venv
+*.log
