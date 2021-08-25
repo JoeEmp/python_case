@@ -11,8 +11,7 @@ nohup.out
 *.png
 *.apk
 *.ipa
-jsonResult.json
 venv*
-node_modules
+jsonResult.json
+HTMLTestRunner*
 *.log
-package*.json
