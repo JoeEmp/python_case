@@ -1,11 +1,10 @@
-from com.sync_case import YamlCaseManager, YamlCaseRunner
 from unittest import TestCase
-from selenium import webdriver
 import unittest
 from time import sleep
-from selenium.webdriver.support.events import EventFiringWebDriver, AbstractEventListener
-from copy import deepcopy
 from collections import deque
+from selenium import webdriver
+from selenium.webdriver.support.events import EventFiringWebDriver, AbstractEventListener
+from com.sync_case import YamlCaseManager, YamlCaseRunner
 
 
 class MyListener(AbstractEventListener):
