@@ -1,10 +1,12 @@
-import yaml
+# 生成和执行用例
+
+import logging
+from copy import deepcopy
 import os
 import importlib
-from com.auto_error import AutoTestException
 from unittest import TestCase
-from copy import deepcopy
-import logging
+import yaml
+from com.auto_error import AutoTestException
 
 
 class YamlCaseManager():
@@ -44,10 +46,10 @@ class YamlCaseManager():
                 print(case_name, '\n', case)
                 print('-'*80)
 
-    def exec_all_cases(self):
+    def exec_all_cases(self, driver, test_case_obj=None, cap=None):
         for case_name, case in self.all_cases:
             try:
-                self.exec_case(case_name, case)
+                self.exec_case(case, driver, test_case_obj, cap)
             except AutoTestException as e:
                 msg = '\n用例: %s\n参数: %s\n错误信息: %s\n' % (case_name, case, e)
                 logging.error(msg)
@@ -55,7 +57,7 @@ class YamlCaseManager():
             except Exception as e:
                 logging.error(e)
 
-    def exec_case(self, case_name, case, driver, test_case_obj=None, cap=None):
+    def exec_case(self, case, driver, test_case_obj=None, cap=None):
         YamlCaseRunner(
             case,
             driver,
@@ -110,7 +112,7 @@ class YamlTemplateCases():
 
 
 class YamlCaseRunner():
-    def __init__(self, case, driver, cap=None, test_case_obj=None):
+    def __init__(self, case, driver, test_case_obj=None, cap=None):
         self.case = case
         self.driver = driver
         self.cap = cap
@@ -149,25 +151,25 @@ class YamlCaseRunner():
                 return ('assert',
                         self.exec_assert_step(
                             self.test_case_obj,
-                            func_args=args, 
-                            driver=self.driver, 
+                            func_args=args,
+                            driver=self.driver,
                             result=result))
             # driver步骤
             elif 'driver' == func.lower():
                 return ('driver',
                         self.exec_driver_step(
                             func_dict=args,
-                            driver=self.driver, 
+                            driver=self.driver,
                             cap=self.cap))
             # 普通步骤
             else:
                 page = func
                 return ('page',
                         self.exec_po_step(
-                            page=page, 
+                            page=page,
                             ele_dict=args,
-                            imp_module=imp_module, 
-                            driver=self.driver, 
+                            imp_module=imp_module,
+                            driver=self.driver,
                             cap=self.cap))
 
     def exec_assert_step(self, test_case_obj: TestCase, func_args, driver=None, result=None):
