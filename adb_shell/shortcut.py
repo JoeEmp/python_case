@@ -1,5 +1,6 @@
 import os
 
+
 def get_activity_app_apk(target_name='', pkg_name=''):
     """ 
     获取当前app安装包
