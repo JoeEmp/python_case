@@ -1,52 +1,43 @@
 # https://github.com/joke2k/faker
 # pip3 install Faker
-from faker import Faker
-from faker.providers import BaseProvider
+
 import json
 from typing import Union
 from urllib import parse
+import logging
+from faker import Faker
+
 
 fake = Faker('zh-CN')
-
-
-class parameterProvider(BaseProvider):
-    # fake = Faker()
-    # fake.add_provider(parameterProvider)
-    # fake.hello()
-
-    def hello(self):
-        print('Say hello from parameterProvider')
 
 
 class myFaker(Faker):
     json_types = [int, float, bool, dict, None, list, str]
 
-    def guess_type(self, obj: str, types=list()):
-        """guess string data type."""
+    def guess_type(self, obj: str, types=None):
+        """guess string data type.
+        return type like 'bool'
+        """
         types = types or self.json_types
         for obj_type in types:
             try:
                 if obj_type is bool:
                     if "true" == obj.lower() or "false" == obj.lower():
                         return 'bool'
-                    else:
-                        continue
+                    continue
                 elif obj_type is dict:
                     if "{" == obj[0] and "}" == obj[-1]:
-                        json.loads(obj.replace("'",'"'))
+                        json.loads(obj.replace("'", '"'))
                         return 'dict'
-                    else:
-                        continue
+                    continue
                 elif obj_type is list:
                     if self.isList(obj):
                         return 'list'
-                    else:
-                        continue
+                    continue
                 elif obj_type is None:
                     if "null" == obj:
                         return "None"
-                    else:
-                        continue
+                    continue
                 else:
                     obj_type(obj)
                     return str(obj_type)
@@ -55,7 +46,7 @@ class myFaker(Faker):
         return str(type(None))
 
     @staticmethod
-    def isList(valueStr: str):
+    def is_list(valueStr: str):
         # case [1,2,3,4,[1,2,[1,2]]]
         start_index = valueStr.rindex('[')
         end_index = valueStr.index(']')
@@ -65,17 +56,17 @@ class myFaker(Faker):
                 return False
             newValueStr = valueStr.replace(
                 valueStr[start_index:end_index+1], '0')
-            if 2 > len(newValueStr):
+            if len(newValueStr) < 2:
                 return True
             else:
                 return myFaker.isList(newValueStr)
         except Exception as e:
+            logging.warning(e)
             return False
 
     def fakeDataByTpye(self, valueStr, is_str=False):
         # 暂时仅支持json的数据类型
         strType = self.guess_type(valueStr)
-        print(valueStr)
         if 'int' in strType:
             return self.pyint()
         if 'float' in strType:
@@ -98,10 +89,12 @@ class myFaker(Faker):
 
     def syncParameter(self, source_param: Union[str, dict]):
         """ return parameter from url or body."""
+        result = None
         if isinstance(source_param, dict):
-            return self.syncBodyParameter(source_param)
+            result = self.syncBodyParameter(source_param)
         else:
-            return self.syncUrlParameter(source_param)
+            result = self.syncUrlParameter(source_param)
+        return result
 
     def syncBodyParameter(self, source_param: dict):
         for k, v in source_param.items():
@@ -131,22 +124,26 @@ class myFaker(Faker):
                 source_param[key] = self.fakeDataByTpye(value)
         return source_param
 
-    def fakeRequests(self, param_type: str, source_param: [str, dict], withoutFaker):
+    def fakeRequests(self, param_type: str, source_param: [str, dict], withoutFaker=None):
+        result = None
+        if not withoutFaker:
+            withoutFaker = []
         fakerData = self.generatorParameter(source_param, withoutFaker)
         if 'url' == param_type:
             if 0 >= source_param.find('?'):
-                urlRoute = ''
+                result = ''
             else:
-                urlRoute = source_param.split('?')[0] + "?"
+                result = source_param.split('?')[0] + "?"
             urlParam = '&'.join([k+"="+str(v) for k, v in fakerData.items()])
-            return urlRoute + urlParam
+            result += urlParam
         elif "body" == param_type:
-            return fakerData
+            result = fakerData
+        return result
 
-    def fakeUrlRequests(self, url, withoutFaker=list()):
+    def fakeUrlRequests(self, url, withoutFaker=None):
         return self.fakeRequests('url', url, withoutFaker)
 
-    def fakeBodyRequests(self, body, withoutFaker=list()):
+    def fakeBodyRequests(self, body, withoutFaker=None):
         return self.fakeRequests('body', body, withoutFaker)
 
 
@@ -165,7 +162,7 @@ def requestsDemo(seed=0):
     fakeBody = fake.fakeBodyRequests({'errormsg': "fake data", "result": 344})
     print("faker new body is %s" % fakeBody)
     fakeBody = fake.fakeBodyRequests(
-        {'errormsg': "fake data", "result": {"total": {"show_num":["213++",3],"hide_num":0}}})
+        {'errormsg': "fake data", "result": {"total": {"show_num": ["213++", 3], "hide_num": 0}}})
     print("faker new body is %s" % fakeBody)
 
 
