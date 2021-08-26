@@ -1,12 +1,13 @@
 # 不做研究只做应用，用到哪写到哪
 
-import xlrd
 from datetime import datetime
+import xlrd
 
-datetime_fmt = '%H:%M:%S'
+
+DATETIME_FMT = '%H:%M:%S'
 
 
-class my_excel():
+class MyExcel():
     def __init__(self, xls, sheet_name='Sheet1'):
         self.xls, self.sheet_name = xls, sheet_name
         self.header, self.rows = self.read_excel_xls()
@@ -37,7 +38,7 @@ class my_excel():
         if 3 == value.ctype:
             date_tuple = xlrd.xldate_as_tuple(
                 self.sheet.cell_value(row, col), self.workbook.datemode)
-            return datetime(*date_tuple).strftime(datetime_fmt)
+            return datetime(*date_tuple).strftime(DATETIME_FMT)
         return value
 
     def to_dict(self, header=None, rows=None):
@@ -46,7 +47,7 @@ class my_excel():
         """
         self.dict_table = []
         rows = rows or self.rows
-        headder = header or self.header
+        header = header or self.header
         for row in rows:
             d = {}
             for i in range(len(row)):

@@ -1,7 +1,7 @@
+from threading import Thread
 import pync
 from playsound import playsound
-import os
-from threading import Thread
+
 
 
 def sound(sound_file):
