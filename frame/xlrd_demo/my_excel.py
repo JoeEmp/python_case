@@ -1,13 +1,13 @@
 # 不做研究只做应用，用到哪写到哪
 
-# import xlrd
 from datetime import datetime
-from openpyxl import load_workbook
-
-datetime_fmt = '%H:%M:%S'
+import xlrd
 
 
-class my_excel():
+DATETIME_FMT = '%H:%M:%S'
+
+
+class MyExcel():
     def __init__(self, xls, sheet_name='Sheet1'):
         self.xls, self.sheet_name = xls, sheet_name
         self.header, self.rows = self.read_excel_xls()
@@ -34,7 +34,12 @@ class my_excel():
     def dispaly_value(self, row, col):
         """return dispaly value which your edit"""
         # 兼容日期value为浮点数的情况
-        return self.sheet.cell(row=row, column=col).value
+        value = self.sheet.cell(row, col)
+        if 3 == value.ctype:
+            date_tuple = xlrd.xldate_as_tuple(
+                self.sheet.cell_value(row, col), self.workbook.datemode)
+            return datetime(*date_tuple).strftime(DATETIME_FMT)
+        return value
 
     def to_dict(self, header=None, rows=None):
         """行数据转json格式

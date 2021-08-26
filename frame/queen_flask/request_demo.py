@@ -1,5 +1,5 @@
-import requests
 import threading
+import requests
 
 
 def async_rq(index):
@@ -10,9 +10,9 @@ def async_rq(index):
 
 
 if __name__ == "__main__":
-    rqs=[]
+    rqs = []
     for i in range(100):
-        rqs.append(threading.Thread(target=async_rq,args=(i,)))
+        rqs.append(threading.Thread(target=async_rq, args=(i,)))
     for t in rqs:
         t.start()
     for t in rqs:

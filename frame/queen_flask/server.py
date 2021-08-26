@@ -1,15 +1,16 @@
 from queue import Queue
-from flask import Flask, request, jsonify
 import random
 from time import sleep
 import json
 from json import JSONDecodeError
-
-index_queue = None
-app = Flask(__name__)
+from flask import Flask, request, jsonify
 
 
-class api_queue():
+INDEX_QUEUE = None
+APP = Flask(__name__)
+
+
+class ApiQueue():
     def __init__(self, max_size=2):
         self.queue = Queue(max_size)
 
@@ -33,30 +34,30 @@ class api_queue():
 
 
 def say_hello(data):
-    sleep(random.randint(0,4))
+    sleep(random.randint(0, 4))
     return {"code": 0, "result": "%s" % data['name']}
 
 
-@app.route('/queue/hello', methods=["POST"])
+@APP.route('/queue/hello', methods=["POST"])
 def hello_world():
-    global index_queue
-    if index_queue.full():
+    global INDEX_QUEUE
+    if INDEX_QUEUE.full():
         return jsonify(code=1, msg="服务繁忙请稍后再试")
     try:
         data = json.loads(request.get_data())
-    except JSONDecodeError as e:
+    except JSONDecodeError:
         print(request.get_data())
         return jsonify(code=-1, msg='参数错误')
-    index_queue.put(say_hello, data)
-    return index_queue.get()
+    INDEX_QUEUE.put(say_hello, data)
+    return INDEX_QUEUE.get()
 
 
 def init_modules():
-    global index_queue
-    index_queue = api_queue()
+    global INDEX_QUEUE
+    INDEX_QUEUE = ApiQueue()
 
 
 if __name__ == "__main__":
     init_modules()
-    app.config['JSON_AS_ASCII'] = False
-    app.run(debug=True, threaded=True)
+    APP.config['JSON_AS_ASCII'] = False
+    APP.run(debug=True, threaded=True)
