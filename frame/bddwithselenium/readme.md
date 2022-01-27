@@ -16,7 +16,7 @@ pip install selenium
 
 ### 快速开始
 ```(shell)
-mv {this_file_dir}
+cd {this_file_dir}
 behave baidu.feature
 ```
 
