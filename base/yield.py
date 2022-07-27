@@ -6,9 +6,7 @@ from random import random as rd
 #range函数的实现
 def my_range(start,stop=0,step=1):
     if stop < start:
-        t = stop
-        stop = start
-        start = t
+        t,stop,start = stop,start,t
     while start < stop:
         start += step
         yield start-1
@@ -64,7 +62,7 @@ def greeting(name, times, duration = 1):
         print("Hello, %s.%d!" % (name, i))
 
 if __name__ == '__main__':
-    pass
+    print(dir(my_range))
     # def test():
     #     dispatcher = Dispatcher([greeting('Liam', 3), greeting('Sophia', 3), greeting('Cancan', 3)])
     #     dispatcher.polling()

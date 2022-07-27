@@ -111,3 +111,11 @@ def step_impl9(context, n):
 @Then('截图{file_name}')
 def step_impl10(context, file_name):
     context.browser.save_screenshot('../%s' % file_name)
+
+
+@When('双击{}按钮')
+def step_impl11(context,ele):
+    try:
+        context.browser.find_element_by_xpath(page_ele_dict[ele]).double_click()
+    except Exception as e:
+        logging.warning(e)

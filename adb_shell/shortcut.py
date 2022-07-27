@@ -24,5 +24,11 @@ def get_activity_app_apk(target_name='', pkg_name=''):
     os.popen("adb pull %s %s" % (pkg_path, target_name))
 
 
+def get_size():
+    """adb shell wm size """
+    r = os.popen('adb shell wm size').read()
+    return r.split(' ')[-1].split('x')
+
+
 if __name__ == "__main__":
     get_activity_app_apk()

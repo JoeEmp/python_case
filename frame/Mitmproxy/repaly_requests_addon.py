@@ -39,7 +39,8 @@ class logRecord:
             self.response_log['url'] = flow.request.url
             self.response_log['text'] = flow.response.text
             with open('record_response_%s.log' % self.ts, 'a+') as f:
-                f.writelines(json.dumps(self.response_log)+os.linesep)
+                f.writelines(json.dumps(self.response_log,
+                                        ensure_ascii=False)+os.linesep)
                 f.close()
 
 

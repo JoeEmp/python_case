@@ -1,3 +1,4 @@
+import requests
 import random
 import time
 import requests
@@ -10,15 +11,7 @@ TIMER = Timeout(1)
 TIMER.start()
 
 
-def get_data(num, begin=0, **kwargs):
-    """
-
-    Arguments:
-        num {[int} -- 获取数量
-
-    Yields:
-        [str] -- 用户名
-    """
+def get_data(num,begin=0,**kwargs):  
     if 'filename' not in kwargs:
         kwargs['filename'] = ''
     try:
@@ -56,26 +49,24 @@ def make_data(num, filename):
 
 
 def req(name):
-    return requests.get('http://localhost:5000/%s' % name)
-
+    return requests.get('http://192.169.3.92:5000/%s'%name,proxies={'http':'localhost:8888'})
 
 def erupt_get_hello(num, **kwargs):
     if 'filename' not in kwargs:
         kwargs['filename'] = ''
-        begin_time = time.time()
     # 异步模式
     run_gevent_list = []
     for name in get_data(num):
-        run_gevent_list.append(gevent.spawn(req, name))
+        run_gevent_list.append(gevent.spawn(req,name))
+    begin_time = time.time()
     try:
         gevent.joinall(run_gevent_list, timeout=TIMER)
     except Timeout:
-        print('返回超时')
+        print('任一请求返回超时')
     # 同步处理查看哪一次请求返回缓慢，但是速度慢
     # for name in get_data(num):
     #     try:
     #         gevent.spawn(req,name).join(timeout=timer)
-    #         # gevent.joinall(run_gevent_list,timeout=timer)
     #     except Timeout:
     #         print('%s 返回超时'%name)
     end = time.time()

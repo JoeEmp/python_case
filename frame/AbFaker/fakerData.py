@@ -67,6 +67,7 @@ class myFaker(Faker):
     def fakeDataByTpye(self, valueStr, is_str=False):
         # 暂时仅支持json的数据类型
         strType = self.guess_type(valueStr)
+        # print(valueStr)
         if 'int' in strType:
             return self.pyint()
         if 'float' in strType:
