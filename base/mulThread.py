@@ -28,7 +28,7 @@ class Producer():
         count = 0
         while True:
             try:
-                q.put(next(self.items))
+                self._q.put(next(self.items))
                 count += 1
             except StopIteration:
                 break
